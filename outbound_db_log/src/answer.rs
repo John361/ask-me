@@ -1,9 +1,13 @@
+use async_trait::async_trait;
+
 use domain::answer::{Answer, AnswerRepository};
 
+#[derive(Clone, Default)]
 struct AnswerRepositoryDbLog;
 
+#[async_trait]
 impl AnswerRepository for AnswerRepositoryDbLog {
-    fn create(&self, answer: &Answer) -> Answer {
+    async fn create(&self, answer: &Answer) -> Answer {
         println!("Creating new answer");
         Answer {
             id: answer.id.clone(),
@@ -11,7 +15,7 @@ impl AnswerRepository for AnswerRepositoryDbLog {
         }
     }
 
-    fn update(&self, answer: &Answer) -> Answer {
+    async fn update(&self, answer: &Answer) -> Answer {
         println!("Updating answer");
         Answer {
             id: answer.id.clone(),
@@ -19,7 +23,7 @@ impl AnswerRepository for AnswerRepositoryDbLog {
         }
     }
 
-    fn delete(&self, id: &str) -> bool {
+    async fn delete(&self, id: &str) -> bool {
         println!("Deleting answer with id: {}", id);
         true
     }

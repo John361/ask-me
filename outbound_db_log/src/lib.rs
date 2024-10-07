@@ -1,6 +1,2 @@
-mod answer;
-mod question;
-
-fn main() {
-    println!("Hello, world!");
-}
+pub mod answer;
+pub mod question;
