@@ -1,14 +1,15 @@
-use std::future::Future;
+use async_trait::async_trait;
 
 pub struct Answer {
     pub id: Option<String>,
     pub text: String,
 }
 
+#[async_trait]
 pub trait AnswerRepository: Clone + Send + Sync + 'static {
-    fn create(&self, answer: &Answer) -> impl Future<Output = Answer> + Send;
-    fn update(&self, answer: &Answer) -> impl Future<Output = Answer> + Send;
-    fn delete(&self, id: &str) -> impl Future<Output = bool> + Send;
+    async fn create(&self, answer: &Answer) -> Answer;
+    async fn update(&self, answer: &Answer) -> Answer;
+    async fn delete(&self, id: &str) -> bool;
 }
 
 pub struct AnswerService<R> where R: AnswerRepository {
