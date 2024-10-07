@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+domain = { path = "../domain" }
 prost = "0.13.3"
 tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
 tonic = "0.12.3"
