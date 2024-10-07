@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package answer;
+
+// Services
+service AnswerService {
+    rpc Create (AnswerCreateRequest) returns (AnswerCreateResponse);
+    rpc Update (AnswerUpdateRequest) returns (AnswerUpdateResponse);
+    rpc Delete (AnswerDeleteResponse) returns (AnswerDeleteResponse);
+}
+
+// Requests
+message AnswerCreateRequest {
+    string text = 1;
+}
+
+message AnswerUpdateRequest {
+    string id = 1;
+    string text = 2;
+}
+
+message AnswerDeleteRequest {
+    string id = 1;
+}
+
+// Responses
+message AnswerCreateResponse {
+    string id = 1;
+    string text = 2;
+}
+
+message AnswerUpdateResponse {
+    string id = 1;
+    string text = 2;
+}
+
+message AnswerDeleteResponse {
+    bool result = 1;
+}
