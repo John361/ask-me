@@ -4,8 +4,8 @@ pub struct Answer {
 }
 
 pub trait AnswerRepository {
-    fn create(&self, question: &Answer) -> Answer;
-    fn update(&self, question: &Answer) -> Answer;
+    fn create(&self, answer: &Answer) -> Answer;
+    fn update(&self, answer: &Answer) -> Answer;
     fn delete(&self, id: &str) -> bool;
 }
 
@@ -14,12 +14,12 @@ pub struct AnswerService {
 }
 
 impl AnswerService {
-    pub fn create(&self, question: &Answer) -> Answer {
-        self.repository.create(&question)
+    pub fn create(&self, answer: &Answer) -> Answer {
+        self.repository.create(&answer)
     }
 
-    pub fn update(&self, question: &Answer) -> Answer {
-        self.repository.update(&question)
+    pub fn update(&self, answer: &Answer) -> Answer {
+        self.repository.update(&answer)
     }
 
     pub fn delete(&self, id: &str) -> bool {
