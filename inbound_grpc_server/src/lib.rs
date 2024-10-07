@@ -1,7 +1,9 @@
 mod answer_impl;
 mod question_impl;
 
+use tower_http::cors::{Any, CorsLayer};
 use tonic::transport::Server;
+use tonic_web::GrpcWebLayer;
 
 use domain::answer::AnswerServiceTrait;
 use domain::question::QuestionServiceTrait;
@@ -17,7 +19,15 @@ pub async fn start_server<AS: AnswerServiceTrait, QS: QuestionServiceTrait>(
     let answer_service = AnswerServiceImpl::new(answer_repository);
     let question_service = QuestionServiceImpl::new(question_repository);
 
+    let cors = CorsLayer::new()
+        .allow_methods(Any)
+        .allow_origin(Any)
+        .allow_headers(Any);
+
     Server::builder()
+        .accept_http1(true)
+        .layer(cors)
+        .layer(GrpcWebLayer::new())
         .add_service(AnswerServiceServer::new(answer_service))
         .add_service(QuestionServiceServer::new(question_service))
         .serve(address)
