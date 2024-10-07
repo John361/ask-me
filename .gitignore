@@ -1,0 +1,28 @@
+# IDE
+.idea/
+.vscode/
+
+# App folders
+target/
+tests/
+certificates/
+node_modules/
+dist/
+www/
+tmp/
+.ionic/
+.angular/
+platforms/
+plugins/
+
+**/config/*
+!**/config/*template*
+!**/config/*.rs
+!**/config/*.conf
+
+# Files
+.env
+
+# System files
+.DS_Store
+Thumbs.db
