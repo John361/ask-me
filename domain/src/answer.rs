@@ -1,28 +1,30 @@
+use std::future::Future;
+
 pub struct Answer {
     pub id: Option<String>,
     pub text: String,
 }
 
-pub trait AnswerRepository {
-    fn create(&self, answer: &Answer) -> Answer;
-    fn update(&self, answer: &Answer) -> Answer;
-    fn delete(&self, id: &str) -> bool;
+pub trait AnswerRepository: Clone + Send + Sync + 'static {
+    fn create(&self, answer: &Answer) -> impl Future<Output = Answer> + Send;
+    fn update(&self, answer: &Answer) -> impl Future<Output = Answer> + Send;
+    fn delete(&self, id: &str) -> impl Future<Output = bool> + Send;
 }
 
-pub struct AnswerService {
-    repository: Box<dyn AnswerRepository>,
+pub struct AnswerService<R> where R: AnswerRepository {
+    repository: R,
 }
 
-impl AnswerService {
-    pub fn create(&self, answer: &Answer) -> Answer {
-        self.repository.create(&answer)
+impl<R> AnswerService<R> where R: AnswerRepository {
+    pub async fn create(&self, answer: &Answer) -> Answer {
+        self.repository.create(&answer).await
     }
 
-    pub fn update(&self, answer: &Answer) -> Answer {
-        self.repository.update(&answer)
+    pub async fn update(&self, answer: &Answer) -> Answer {
+        self.repository.update(&answer).await
     }
 
-    pub fn delete(&self, id: &str) -> bool {
-        self.repository.delete(id)
+    pub async fn delete(&self, id: &str) -> bool {
+        self.repository.delete(id).await
     }
 }
