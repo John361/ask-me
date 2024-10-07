@@ -6,7 +6,7 @@ package question;
 service QuestionService {
     rpc Create (QuestionCreateRequest) returns (QuestionCreateResponse);
     rpc Update (QuestionUpdateRequest) returns (QuestionUpdateResponse);
-    rpc Delete (QuestionDeleteResponse) returns (QuestionDeleteResponse);
+    rpc Delete (QuestionDeleteRequest) returns (QuestionDeleteResponse);
 }
 
 // Requests

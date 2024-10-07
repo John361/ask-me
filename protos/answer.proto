@@ -6,7 +6,7 @@ package answer;
 service AnswerService {
     rpc Create (AnswerCreateRequest) returns (AnswerCreateResponse);
     rpc Update (AnswerUpdateRequest) returns (AnswerUpdateResponse);
-    rpc Delete (AnswerDeleteResponse) returns (AnswerDeleteResponse);
+    rpc Delete (AnswerDeleteRequest) returns (AnswerDeleteResponse);
 }
 
 // Requests
