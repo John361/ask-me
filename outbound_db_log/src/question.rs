@@ -1,12 +1,12 @@
 use async_trait::async_trait;
 
-use domain::question::{Question, QuestionRepository};
+use domain::question::{Question, QuestionRepositoryTrait};
 
 #[derive(Clone, Default)]
-struct QuestionRepositoryDbLog;
+pub struct QuestionRepositoryDbLog;
 
 #[async_trait]
-impl QuestionRepository for QuestionRepositoryDbLog {
+impl QuestionRepositoryTrait for QuestionRepositoryDbLog {
     async fn create(&self, question: &Question) -> Question {
         println!("Creating new question");
         Question {

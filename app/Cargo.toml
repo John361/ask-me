@@ -1,0 +1,10 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+domain = { path = "../domain" }
+inbound_grpc_server = { path = "../inbound_grpc_server" }
+outbound_db_log = { path = "../outbound_db_log" }
+tokio = "1.40.0"

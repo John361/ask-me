@@ -1,24 +1,24 @@
 use tonic::{Request, Response, Status};
 
-use domain::question::{Question, QuestionRepository};
+use domain::question::{Question, QuestionServiceTrait};
 
 use crate::question_impl::question_service_server::QuestionService;
 
 tonic::include_proto!("question");
 
 #[derive(Debug, Default)]
-pub struct QuestionServiceImpl<R> where R: QuestionRepository {
-    repository: R
+pub struct QuestionServiceImpl<S> where S: QuestionServiceTrait {
+    service: S
 }
 
-impl<R> QuestionServiceImpl<R> where R: QuestionRepository {
-    pub fn new(repository: R) -> Self {
-        Self { repository }
+impl<S> QuestionServiceImpl<S> where S: QuestionServiceTrait {
+    pub fn new(service: S) -> Self {
+        Self { service }
     }
 }
 
 #[tonic::async_trait]
-impl<R> QuestionService for QuestionServiceImpl<R> where R: QuestionRepository {
+impl<S> QuestionService for QuestionServiceImpl<S> where S: QuestionServiceTrait {
     async fn create(&self, request: Request<QuestionCreateRequest>) -> Result<Response<QuestionCreateResponse>, Status> {
         let request = request.into_inner();
         let request = Question {
@@ -26,7 +26,7 @@ impl<R> QuestionService for QuestionServiceImpl<R> where R: QuestionRepository {
             text: request.text.clone(),
         };
 
-        let response = self.repository.create(&request).await;
+        let response = self.service.create(&request).await;
         let response = QuestionCreateResponse {
             id: response.id.unwrap_or("".to_string()),
             text: response.text.clone(),
@@ -42,7 +42,7 @@ impl<R> QuestionService for QuestionServiceImpl<R> where R: QuestionRepository {
             text: request.text.clone(),
         };
 
-        let response = self.repository.update(&request).await;
+        let response = self.service.update(&request).await;
         let response = QuestionUpdateResponse {
             id: response.id.unwrap_or("".to_string()),
             text: response.text.clone(),
@@ -53,7 +53,7 @@ impl<R> QuestionService for QuestionServiceImpl<R> where R: QuestionRepository {
 
     async fn delete(&self, request: Request<QuestionDeleteRequest>) -> Result<Response<QuestionDeleteResponse>, Status> {
         let request = request.into_inner();
-        let response = self.repository.delete(&request.id).await;
+        let response = self.service.delete(&request.id).await;
         let response = QuestionDeleteResponse {
             result: response
         };

@@ -6,26 +6,41 @@ pub struct Answer {
 }
 
 #[async_trait]
-pub trait AnswerRepository: Clone + Send + Sync + 'static {
+pub trait AnswerRepositoryTrait: Clone + Send + Sync + 'static {
     async fn create(&self, answer: &Answer) -> Answer;
     async fn update(&self, answer: &Answer) -> Answer;
     async fn delete(&self, id: &str) -> bool;
 }
 
-pub struct AnswerService<R> where R: AnswerRepository {
+#[async_trait]
+pub trait AnswerServiceTrait: Clone + Send + Sync + 'static {
+    async fn create(&self, answer: &Answer) -> Answer;
+    async fn update(&self, answer: &Answer) -> Answer;
+    async fn delete(&self, id: &str) -> bool;
+}
+
+#[derive(Clone)]
+pub struct AnswerService<R> where R: AnswerRepositoryTrait {
     repository: R,
 }
 
-impl<R> AnswerService<R> where R: AnswerRepository {
-    pub async fn create(&self, answer: &Answer) -> Answer {
+impl<R> AnswerService<R> where R: AnswerRepositoryTrait {
+    pub fn new(repository: R) -> Self {
+        Self { repository }
+    }
+}
+
+#[async_trait]
+impl<R> AnswerServiceTrait for AnswerService<R> where R: AnswerRepositoryTrait {
+    async fn create(&self, answer: &Answer) -> Answer {
         self.repository.create(&answer).await
     }
 
-    pub async fn update(&self, answer: &Answer) -> Answer {
+    async fn update(&self, answer: &Answer) -> Answer {
         self.repository.update(&answer).await
     }
 
-    pub async fn delete(&self, id: &str) -> bool {
+    async fn delete(&self, id: &str) -> bool {
         self.repository.delete(id).await
     }
 }

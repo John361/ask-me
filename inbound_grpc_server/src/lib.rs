@@ -3,14 +3,14 @@ mod question_impl;
 
 use tonic::transport::Server;
 
-use domain::answer::AnswerRepository;
-use domain::question::QuestionRepository;
+use domain::answer::AnswerServiceTrait;
+use domain::question::QuestionServiceTrait;
 
 use crate::answer_impl::{answer_service_server::AnswerServiceServer, AnswerServiceImpl};
 use crate::question_impl::{question_service_server::QuestionServiceServer, QuestionServiceImpl};
 
-pub async fn start_server<AR: AnswerRepository, QR: QuestionRepository>(
-    answer_repository: AR, question_repository: QR
+pub async fn start_server<AS: AnswerServiceTrait, QS: QuestionServiceTrait>(
+    answer_repository: AS, question_repository: QS
 ) -> Result<(), Box<dyn std::error::Error>> {
 
     let address = "[::1]:8080".parse().unwrap();
